@@ -5,7 +5,7 @@ On 18 May 2022, PyTorch announced the release of GPU-acceleration on Mac with th
 Training deep learning networks consumes a lot of power. Those familiar with this would hav had experienced their GPUs turning up the heat and the sound when they push their batch sizes up.
 M1 is famous for being incredibly quiet and power-efficient when in operation. If this trait is maintained during deep learning training, image what it could do for systems engineering teams around the world.
 
-## 2. Saying goodbye to builky workstations and computers
+## 2. Saying goodbye to bulky workstations and computers
 We've seen how chunky those RTXs are. If GPU-accelearation with the M1 takes off, think about what this means for data server designs, onboard computers for self-driving cars, UAVs, etc.
 
 ## 3. Reduce memory leaks, improve latency during inference
