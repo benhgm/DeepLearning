@@ -1,0 +1,6 @@
+{
+    "filepath": "/Users/benho/Documents/DeepLearning/sample_images/kitti1.png",
+    "model_type": "DPT_Hybrid",
+    "accelerate": "True",
+    "mode": "eval"
+}
