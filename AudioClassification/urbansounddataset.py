@@ -23,7 +23,8 @@ class UrbanSoundDataset(Dataset):
                  audio_dir, 
                  transformation, 
                  target_sample_rate,
-                 num_samples):
+                 num_samples,
+                 device):
         """
         Constructor
 
@@ -34,9 +35,11 @@ class UrbanSoundDataset(Dataset):
         """
         self.annotations = pd.read_csv(annotations_file)
         self.audio_dir = audio_dir
-        self.transformation = transformation
+        self.device = device
+        self.transformation = transformation.to(self.device)
         self.target_sample_rate = target_sample_rate
         self.num_samples = num_samples
+        
 
     def __len__(self):
         """
@@ -59,12 +62,15 @@ class UrbanSoundDataset(Dataset):
         audio_sample_path = self._get_audio_sample_path(index)
         label = self._get_audio_sample_label(index)
         signal, sample_rate = torchaudio.load(audio_sample_path)
-        signal = self._mix_down_if_necessary(signal)
+        signal = signal.to(self.device)
+        
         signal = self._resample_if_necessary(signal, sample_rate)
+        signal = self._mix_down_if_necessary(signal)
         signal = self._cut_if_necessary(signal)
         signal = self._right_pad_if_necessary(signal)
 
         signal = self.transformation(signal)
+        
         return signal, label
 
 
@@ -151,6 +157,9 @@ if __name__ == "__main__":
     # Get 1 second of audio (num_samples / sample_rate)
     SAMPLE_RATE = 22050
     NUM_SAMPLES = 22050
+    
+    device = "cpu"
+    print(f"Using device: {device}")
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
         sample_rate=SAMPLE_RATE,
@@ -164,7 +173,8 @@ if __name__ == "__main__":
         AUDIO_DIR,
         mel_spectrogram,
         SAMPLE_RATE,
-        NUM_SAMPLES
+        NUM_SAMPLES,
+        device
     )
     print(f"There are {len(usd)} samples in the dataset")
     signal, label = usd[0]
